@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import resume from "../assets/Sahil_Lodhi_Resume.pdf"
+import resume from "../assets/Sahil_Lodhi_Resume.pdf";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -22,10 +22,22 @@ const Navbar = () => {
         {/* Logo */}
         <a
           href="#home"
-          className="shrink-0 text-xl font-bold text-white"
+          className="flex shrink-0 items-center gap-3 text-white"
           onClick={handleLinkClick}
         >
-          Sahil<span className="text-cyan-300">.</span>
+          <img
+            src="/portfolioLogo.png"
+            alt="Sahil Lodhi"
+            className="h-10 w-10 rounded-full object-cover"
+          />
+
+          <div className="flex flex-col leading-tight">
+            <span className="text-xl font-bold">
+              Sahil
+            </span>
+
+            <span className="text-sm font-medium text-gray-300">Lodhi</span>
+          </div>
         </a>
 
         {/* Desktop Navigation */}
