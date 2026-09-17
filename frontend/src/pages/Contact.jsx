@@ -16,34 +16,20 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const subject = encodeURIComponent(
-      `Portfolio Contact from ${formData.name}`
-    );
-
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-    );
-
-    window.location.href = `mailto:your-email@example.com?subject=${subject}&body=${body}`;
-  };
-
   return (
-    <div className="min-h-screen flex items-center px-6 md:px-12 lg:px-20 py-20">
-      <div className="w-full max-w-6xl mx-auto">
+    <div className="flex min-h-screen items-center px-6 py-20 md:px-12 lg:px-20">
+      <div className="mx-auto w-full max-w-6xl">
         {/* Heading */}
-        <div className="text-center mb-12">
-          <p className="text-cyan-300 text-sm uppercase tracking-[0.3em]">
+        <div className="mb-12 text-center">
+          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">
             Let's connect
           </p>
 
-          <h2 className="mt-3 text-4xl md:text-5xl font-bold text-white">
+          <h2 className="mt-3 text-4xl font-bold text-white md:text-5xl">
             Contact <span className="text-cyan-300">Me</span>
           </h2>
 
-          <p className="mt-5 max-w-2xl mx-auto text-gray-300">
+          <p className="mx-auto mt-5 max-w-2xl text-gray-300">
             Have a project idea or want to connect? Feel free to send me a
             message.
           </p>
@@ -65,21 +51,25 @@ const Contact = () => {
             <div className="mt-8 space-y-5">
               <div>
                 <p className="text-sm text-gray-400">Email</p>
+
                 <a
-                  href="mailto:your-email@example.com"
+                  href="mailto:sahillodhi369@gmail.com"
                   className="break-all text-gray-200 transition hover:text-cyan-300"
                 >
-                  your-email@example.com
+                  sahillodhi369@gmail.com
                 </a>
               </div>
 
               <div>
                 <p className="text-sm text-gray-400">Location</p>
-                <p className="text-gray-200">Jabalpur, Madhya Pradesh</p>
+                <p className="text-gray-200">
+                  Jabalpur, Madhya Pradesh
+                </p>
               </div>
 
               <div>
                 <p className="text-sm text-gray-400">Availability</p>
+
                 <p className="text-gray-200">
                   Open to internships and development opportunities
                 </p>
@@ -89,18 +79,18 @@ const Contact = () => {
             {/* Social Links */}
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href="https://github.com/"
+                href="https://github.com/lodhisahil"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition hover:border-cyan-300/50 hover:text-cyan-300"
               >
                 GitHub
               </a>
 
               <a
-                href="https://www.linkedin.com/"
+                href="https://www.linkedin.com/in/sahil-l%C3%B8dhi-a451a62b6/"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition hover:border-cyan-300/50 hover:text-cyan-300"
               >
                 LinkedIn
@@ -110,7 +100,8 @@ const Contact = () => {
 
           {/* Contact Form */}
           <form
-            onSubmit={handleSubmit}
+            action="https://formspree.io/f/xvkgolgp"
+            method="POST"
             className="rounded-3xl border border-cyan-200/20 bg-black/20 p-8 backdrop-blur-xl"
           >
             <div className="space-y-5">

@@ -6,32 +6,36 @@ const projects = [
     description:
       "A location-based social safety platform designed to provide emergency alerts, public assistance and community-focused features.",
     technologies: ["React", "Tailwind CSS", "Appwrite", "Maps API"],
-    liveLink: "#",
-    githubLink: "#",
+    image: "/projects/dahej.png",
+    liveLink: "https://dahej-com-2dav.vercel.app/",
+    githubLink: "https://github.com/lodhisahil/Dahej.com",
   },
   {
     title: "Forever E-Commerce",
     description:
       "A modern e-commerce website with a responsive interface, product browsing and a smooth shopping experience.",
     technologies: ["React", "JavaScript", "Tailwind CSS", "Appwrite"],
-    liveLink: "#",
-    githubLink: "#",
+    image: "/projects/forever.png",
+    liveLink: "https://forever-ecommerce-website-pearl.vercel.app/",
+    githubLink: "https://github.com/lodhisahil/Forever-Ecommerce-website",
   },
   {
     title: "Blog Application",
     description:
       "A full-featured blog application where users can create, read and manage blog posts with authentication.",
     technologies: ["React", "Appwrite", "JavaScript", "Tailwind CSS"],
-    liveLink: "#",
-    githubLink: "#",
+    image: "/projects/megablog.png",
+    liveLink: "https://blog-application-eta-two.vercel.app/",
+    githubLink: "https://github.com/lodhisahil/Blog-Application",
   },
   {
-    title: "School Website",
+    title: "Social Post Application",
     description:
-      "A responsive school website presenting information about courses, facilities, activities and contact details.",
-    technologies: ["HTML", "CSS", "JavaScript", "Responsive Design"],
-    liveLink: "#",
-    githubLink: "#",
+      "A full-stack social post application where users can create, share, update and manage posts with a responsive and user-friendly interface.",
+    technologies: ["React", "JavaScript", "Tailwind CSS", "Appwrite"],
+    image: "/projects/socialpost.png",
+    liveLink: "https://social-post-application-five.vercel.app/",
+    githubLink: "https://github.com/lodhisahil/Social-Post-Application",
   },
 ];
 
@@ -63,8 +67,12 @@ const Projects = () => {
               className="group rounded-3xl border border-white/15 bg-white/10 backdrop-blur-xl p-7 text-white transition duration-300 hover:-translate-y-2 hover:border-cyan-300/50 hover:bg-white/15"
             >
               {/* Project Preview Placeholder */}
-              <div className="flex h-40 items-center justify-center rounded-2xl border border-white/10 bg-black/20">
-                <span className="text-5xl text-cyan-300">{"</>"}</span>
+              <div className="h-56 overflow-hidden rounded-2xl border border-white/10 bg-black/20">
+                <img
+                  src={project.image}
+                  alt={`${project.title} preview`}
+                  className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                />
               </div>
 
               <h3 className="mt-6 text-2xl font-semibold text-cyan-300">
@@ -91,6 +99,7 @@ const Projects = () => {
               <div className="mt-7 flex flex-wrap gap-3">
                 <a
                   href={project.liveLink}
+                  target="_blank"
                   className="rounded-xl bg-cyan-400 px-5 py-2.5 font-semibold text-black transition hover:bg-cyan-300"
                 >
                   Live Demo
@@ -98,6 +107,7 @@ const Projects = () => {
 
                 <a
                   href={project.githubLink}
+                  target="_blank"
                   className="rounded-xl border border-white/25 bg-white/10 px-5 py-2.5 font-semibold text-white transition hover:bg-white/20"
                 >
                   GitHub

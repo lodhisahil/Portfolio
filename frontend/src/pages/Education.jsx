@@ -11,16 +11,16 @@ const educationData = [
   {
     year: "Class 12",
     degree: "Higher Secondary Education",
-    institute: "Your School Name",
+    institute: "Tanya Convent H. S. School",
     description:
-      "Completed higher secondary education with a focus on science and technical subjects.",
+      "Completed higher secondary education with a focus on science and technical subjects while securing 94.6% marks.",
   },
   {
     year: "Class 10",
     degree: "Secondary Education",
-    institute: "Your School Name",
+    institute: "Tanya Convent H. S. School",
     description:
-      "Completed secondary education and developed an interest in computers and technology.",
+      "Completed secondary education and developed an interest in computers and technology while securing 94.6% marks.",
   },
 ];
 
