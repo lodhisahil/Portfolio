@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from "react";
 
 const LeetCode = () => {
-  // -----------------------------------------
-  // LeetCode Stats
-  // -----------------------------------------
   const [stats, setStats] = useState({
     totalSolved: 0,
-    streak: 123,
-    activeDays: 236,
+    streak: 0,
+    activeDays: 0,
     easy: 0,
     medium: 0,
     hard: 0,
   });
 
-  // -----------------------------------------
-  // LeetCode Activity Data
-  // -----------------------------------------
   const [activityData, setActivityData] = useState({});
 
-  // -----------------------------------------
-  // Fetch LeetCode Data
-  // -----------------------------------------
+  const formatDateKey = (date) => {
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
   useEffect(() => {
     const fetchLeetCodeData = async () => {
       try {
@@ -32,40 +31,43 @@ const LeetCode = () => {
 
         const result = await response.json();
 
-        // -----------------------------------------
-        // Submission Calendar
-        // -----------------------------------------
-        const calendar = result.calendar;
-
-        const parsedCalendar = JSON.parse(calendar);
-
+        // Parse submission calendar
+        const parsedCalendar = JSON.parse(result.calendar);
         const formattedData = {};
 
-        Object.entries(parsedCalendar).forEach(
-          ([timestamp, count]) => {
-            const date = new Date(Number(timestamp) * 1000);
+        Object.entries(parsedCalendar).forEach(([timestamp, count]) => {
+          const date = new Date(Number(timestamp) * 1000);
+          const dateKey = formatDateKey(date);
 
-            const year = date.getUTCFullYear();
-
-            const month = String(
-              date.getUTCMonth() + 1
-            ).padStart(2, "0");
-
-            const day = String(
-              date.getUTCDate()
-            ).padStart(2, "0");
-
-            const dateKey = `${year}-${month}-${day}`;
-
-            formattedData[dateKey] = count;
-          }
-        );
+          formattedData[dateKey] = count;
+        });
 
         setActivityData(formattedData);
 
-        // -----------------------------------------
-        // Problem Statistics
-        // -----------------------------------------
+        // Calculate active days
+        const activeDays = Object.values(formattedData).filter(
+          (count) => count > 0
+        ).length;
+
+        // Calculate current streak
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+
+        let currentStreak = 0;
+
+        for (let i = 0; ; i++) {
+          const date = new Date(today);
+          date.setUTCDate(today.getUTCDate() - i);
+
+          const dateKey = formatDateKey(date);
+
+          if ((formattedData[dateKey] || 0) > 0) {
+            currentStreak++;
+          } else {
+            break;
+          }
+        }
+
         const allStats = result.stats;
 
         const all = allStats.find(
@@ -84,128 +86,57 @@ const LeetCode = () => {
           (item) => item.difficulty === "Hard"
         );
 
-        setStats((previousStats) => ({
-          ...previousStats,
+        setStats({
           totalSolved: all?.count || 0,
+          streak: currentStreak,
+          activeDays,
           easy: easy?.count || 0,
           medium: medium?.count || 0,
           hard: hard?.count || 0,
-        }));
+        });
       } catch (error) {
-        console.error(
-          "Failed to fetch LeetCode data:",
-          error
-        );
+        console.error("Failed to fetch LeetCode data:", error);
       }
     };
 
     fetchLeetCodeData();
   }, []);
 
-  // -----------------------------------------
-  // Format date as YYYY-MM-DD
-  // -----------------------------------------
-  const formatDateKey = (date) => {
-    const year = date.getUTCFullYear();
-
-    const month = String(
-      date.getUTCMonth() + 1
-    ).padStart(2, "0");
-
-    const day = String(
-      date.getUTCDate()
-    ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-  };
-
-  // -----------------------------------------
-  // Get number of days in month
-  // -----------------------------------------
   const getDaysInMonth = (year, month) => {
-    return new Date(
-      Date.UTC(year, month + 1, 0)
-    ).getUTCDate();
+    return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
   };
 
-  // -----------------------------------------
-  // Generate ONE month
-  //
-  // Sunday = row 1
-  // Monday = row 2
-  // ...
-  // Saturday = row 7
-  //
-  // Each column = one week
-  // -----------------------------------------
   const generateMonth = (year, month) => {
-    const firstDate = new Date(
-      Date.UTC(year, month, 1)
-    );
+    const firstDate = new Date(Date.UTC(year, month, 1));
+    const daysInMonth = getDaysInMonth(year, month);
+    const firstDayOfWeek = firstDate.getUTCDay();
 
-    const daysInMonth = getDaysInMonth(
-      year,
-      month
-    );
-
-    // 0 = Sunday
-    // 1 = Monday
-    // ...
-    // 6 = Saturday
-    const firstDayOfWeek =
-      firstDate.getUTCDay();
-
-    const totalCells =
-      firstDayOfWeek + daysInMonth;
-
-    const numberOfWeeks =
-      Math.ceil(totalCells / 7);
+    const totalCells = firstDayOfWeek + daysInMonth;
+    const numberOfWeeks = Math.ceil(totalCells / 7);
 
     const weeks = [];
 
-    for (
-      let weekIndex = 0;
-      weekIndex < numberOfWeeks;
-      weekIndex++
-    ) {
+    for (let weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
       const week = [];
 
-      for (
-        let dayIndex = 0;
-        dayIndex < 7;
-        dayIndex++
-      ) {
+      for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
         const dayNumber =
-          weekIndex * 7 +
-          dayIndex -
-          firstDayOfWeek +
-          1;
+          weekIndex * 7 + dayIndex - firstDayOfWeek + 1;
 
-        // Empty cell before month starts
-        // or after month ends
-        if (
-          dayNumber < 1 ||
-          dayNumber > daysInMonth
-        ) {
+        if (dayNumber < 1 || dayNumber > daysInMonth) {
           week.push(null);
           continue;
         }
 
         const date = new Date(
-          Date.UTC(
-            year,
-            month,
-            dayNumber
-          )
+          Date.UTC(year, month, dayNumber)
         );
 
-        const dateKey =
-          formatDateKey(date);
+        const dateKey = formatDateKey(date);
 
         week.push({
           date: dateKey,
-          count:
-            activityData[dateKey] || 0,
+          count: activityData[dateKey] || 0,
         });
       }
 
@@ -215,64 +146,35 @@ const LeetCode = () => {
     return weeks;
   };
 
-  // -----------------------------------------
-  // Generate 13 months
-  //
-  // Current month is ALWAYS the last block.
-  // -----------------------------------------
   const generateMonths = () => {
     const today = new Date();
 
-    const endYear =
-      today.getUTCFullYear();
+    const endYear = today.getUTCFullYear();
+    const endMonth = today.getUTCMonth();
 
-    const endMonth =
-      today.getUTCMonth();
-
-    // Start 12 months before current month
     const startDate = new Date(
-      Date.UTC(
-        endYear,
-        endMonth - 12,
-        1
-      )
+      Date.UTC(endYear, endMonth - 12, 1)
     );
 
     const months = [];
 
-    let currentYear =
-      startDate.getUTCFullYear();
-
-    let currentMonth =
-      startDate.getUTCMonth();
+    let currentYear = startDate.getUTCFullYear();
+    let currentMonth = startDate.getUTCMonth();
 
     while (
       currentYear < endYear ||
-      (currentYear === endYear &&
-        currentMonth <= endMonth)
+      (currentYear === endYear && currentMonth <= endMonth)
     ) {
       months.push({
         year: currentYear,
         month: currentMonth,
-
         label: new Date(
-          Date.UTC(
-            currentYear,
-            currentMonth,
-            1
-          )
-        ).toLocaleString(
-          "en-US",
-          {
-            month: "short",
-            timeZone: "UTC",
-          }
-        ),
-
-        weeks: generateMonth(
-          currentYear,
-          currentMonth
-        ),
+          Date.UTC(currentYear, currentMonth, 1)
+        ).toLocaleString("en-US", {
+          month: "short",
+          timeZone: "UTC",
+        }),
+        weeks: generateMonth(currentYear, currentMonth),
       });
 
       currentMonth++;
@@ -286,26 +188,17 @@ const LeetCode = () => {
     return months;
   };
 
-  const months = generateMonths();
-
-  // -----------------------------------------
-  // Activity Level
-  // -----------------------------------------
   const getActivityLevel = (count) => {
     if (count === 0) return 0;
-
     if (count <= 2) return 1;
-
     if (count <= 4) return 2;
-
     if (count <= 7) return 3;
 
     return 4;
   };
 
-  // -----------------------------------------
-  // Difficulty Percentage
-  // -----------------------------------------
+  const months = generateMonths();
+
   const easyPercentage =
     stats.totalSolved > 0
       ? (stats.easy / stats.totalSolved) * 100
@@ -323,9 +216,6 @@ const LeetCode = () => {
 
   return (
     <section className="mt-16">
-      {/* ------------------------------------ */}
-      {/* Heading */}
-      {/* ------------------------------------ */}
       <div className="mb-8 text-center">
         <p className="mb-2 text-sm uppercase tracking-[0.3em] text-cyan-300">
           Problem Solving
@@ -344,11 +234,7 @@ const LeetCode = () => {
         </p>
       </div>
 
-      {/* ------------------------------------ */}
-      {/* Main Stats */}
-      {/* ------------------------------------ */}
       <div className="grid gap-4 sm:grid-cols-3">
-        {/* Total Solved */}
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur-xl transition duration-300 hover:border-cyan-300/40 hover:bg-white/10">
           <p className="text-sm text-gray-400">
             Problems Solved
@@ -363,7 +249,6 @@ const LeetCode = () => {
           </p>
         </div>
 
-        {/* Streak */}
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur-xl transition duration-300 hover:border-cyan-300/40 hover:bg-white/10">
           <p className="text-sm text-gray-400">
             Current Streak
@@ -378,7 +263,6 @@ const LeetCode = () => {
           </p>
         </div>
 
-        {/* Active Days */}
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur-xl transition duration-300 hover:border-cyan-300/40 hover:bg-white/10">
           <p className="text-sm text-gray-400">
             Active Days
@@ -394,9 +278,6 @@ const LeetCode = () => {
         </div>
       </div>
 
-      {/* ------------------------------------ */}
-      {/* Difficulty */}
-      {/* ------------------------------------ */}
       <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-6 backdrop-blur-xl md:p-8">
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-white">
@@ -409,7 +290,6 @@ const LeetCode = () => {
         </div>
 
         <div className="grid gap-5 md:grid-cols-3">
-          {/* Easy */}
           <div className="rounded-xl border border-white/10 bg-black/20 p-5">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-green-400">
@@ -435,7 +315,6 @@ const LeetCode = () => {
             </p>
           </div>
 
-          {/* Medium */}
           <div className="rounded-xl border border-white/10 bg-black/20 p-5">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-yellow-400">
@@ -461,7 +340,6 @@ const LeetCode = () => {
             </p>
           </div>
 
-          {/* Hard */}
           <div className="rounded-xl border border-white/10 bg-black/20 p-5">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-red-400">
@@ -489,9 +367,6 @@ const LeetCode = () => {
         </div>
       </div>
 
-      {/* ------------------------------------ */}
-      {/* Contribution Calendar */}
-      {/* ------------------------------------ */}
       <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-6 backdrop-blur-xl md:p-8">
         <div className="mb-6">
           <h3 className="text-xl font-semibold text-white">
@@ -503,7 +378,6 @@ const LeetCode = () => {
           </p>
         </div>
 
-        {/* Calendar Scroll Area */}
         <div className="overflow-x-auto pb-3">
           <div className="min-w-max">
             <div className="flex gap-5">
@@ -517,7 +391,6 @@ const LeetCode = () => {
                     key={`${monthData.year}-${monthData.month}`}
                     className="shrink-0"
                   >
-                    {/* Month Name */}
                     <div
                       className="mb-3 text-center text-sm text-gray-400"
                       style={{
@@ -527,7 +400,6 @@ const LeetCode = () => {
                       {monthData.label}
                     </div>
 
-                    {/* Month Calendar */}
                     <div className="flex gap-[3px]">
                       {monthData.weeks.map(
                         (week, weekIndex) => (
@@ -537,7 +409,6 @@ const LeetCode = () => {
                           >
                             {week.map(
                               (day, dayIndex) => {
-                                // Invisible placeholder
                                 if (!day) {
                                   return (
                                     <div
@@ -580,18 +451,13 @@ const LeetCode = () => {
           </div>
         </div>
 
-        {/* Legend */}
         <div className="mt-6 flex items-center justify-end gap-2 text-xs text-gray-400">
           <span>Less</span>
 
           <div className="h-3 w-3 rounded-[3px] bg-white/5" />
-
           <div className="h-3 w-3 rounded-[3px] bg-cyan-400/20" />
-
           <div className="h-3 w-3 rounded-[3px] bg-cyan-400/40" />
-
           <div className="h-3 w-3 rounded-[3px] bg-cyan-400/70" />
-
           <div className="h-3 w-3 rounded-[3px] bg-cyan-300" />
 
           <span>More</span>
