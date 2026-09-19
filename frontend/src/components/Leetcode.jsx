@@ -4,79 +4,117 @@ const LeetCode = () => {
   // -----------------------------------------
   // LeetCode Stats
   // -----------------------------------------
-  const stats = {
-    totalSolved: 266,
+  const [stats, setStats] = useState({
+    totalSolved: 0,
     streak: 123,
     activeDays: 236,
-    easy: 108,
-    medium: 142,
-    hard: 16,
-  };
+    easy: 0,
+    medium: 0,
+    hard: 0,
+  });
 
   // -----------------------------------------
-  // Demo Activity Data
-  // Replace / connect this with your
-  // LeetCode API data later.
+  // LeetCode Activity Data
   // -----------------------------------------
   const [activityData, setActivityData] = useState({});
 
+  // -----------------------------------------
+  // Fetch LeetCode Data
+  // -----------------------------------------
   useEffect(() => {
-  const fetchLeetCodeData = async () => {
-    try {
-      const response = await fetch("/api/leetcode");
+    const fetchLeetCodeData = async () => {
+      try {
+        const response = await fetch("/api/leetcode");
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch LeetCode data");
-      }
-
-      const result = await response.json();
-
-      const calendar =
-        result.data.matchedUser.userCalendar.submissionCalendar;
-
-      const parsedCalendar = JSON.parse(calendar);
-
-      const formattedData = {};
-
-      Object.entries(parsedCalendar).forEach(
-        ([timestamp, count]) => {
-          const date = new Date(Number(timestamp) * 1000);
-
-          const year = date.getUTCFullYear();
-          const month = String(
-            date.getUTCMonth() + 1
-          ).padStart(2, "0");
-          const day = String(
-            date.getUTCDate()
-          ).padStart(2, "0");
-
-          const dateKey = `${year}-${month}-${day}`;
-
-          formattedData[dateKey] = count;
+        if (!response.ok) {
+          throw new Error("Failed to fetch LeetCode data");
         }
-      );
 
-      setActivityData(formattedData);
-    } catch (error) {
-      console.error(
-        "Failed to fetch LeetCode data:",
-        error
-      );
-    }
-  };
+        const result = await response.json();
 
-  fetchLeetCodeData();
-}, []);
+        // -----------------------------------------
+        // Submission Calendar
+        // -----------------------------------------
+        const calendar = result.calendar;
 
-  // const today = new Date();
+        const parsedCalendar = JSON.parse(calendar);
+
+        const formattedData = {};
+
+        Object.entries(parsedCalendar).forEach(
+          ([timestamp, count]) => {
+            const date = new Date(Number(timestamp) * 1000);
+
+            const year = date.getUTCFullYear();
+
+            const month = String(
+              date.getUTCMonth() + 1
+            ).padStart(2, "0");
+
+            const day = String(
+              date.getUTCDate()
+            ).padStart(2, "0");
+
+            const dateKey = `${year}-${month}-${day}`;
+
+            formattedData[dateKey] = count;
+          }
+        );
+
+        setActivityData(formattedData);
+
+        // -----------------------------------------
+        // Problem Statistics
+        // -----------------------------------------
+        const allStats = result.stats;
+
+        const all = allStats.find(
+          (item) => item.difficulty === "All"
+        );
+
+        const easy = allStats.find(
+          (item) => item.difficulty === "Easy"
+        );
+
+        const medium = allStats.find(
+          (item) => item.difficulty === "Medium"
+        );
+
+        const hard = allStats.find(
+          (item) => item.difficulty === "Hard"
+        );
+
+        setStats((previousStats) => ({
+          ...previousStats,
+          totalSolved: all?.count || 0,
+          easy: easy?.count || 0,
+          medium: medium?.count || 0,
+          hard: hard?.count || 0,
+        }));
+      } catch (error) {
+        console.error(
+          "Failed to fetch LeetCode data:",
+          error
+        );
+      }
+    };
+
+    fetchLeetCodeData();
+  }, []);
 
   // -----------------------------------------
   // Format date as YYYY-MM-DD
   // -----------------------------------------
   const formatDateKey = (date) => {
     const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const day = String(date.getUTCDate()).padStart(2, "0");
+
+    const month = String(
+      date.getUTCMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+      date.getUTCDate()
+    ).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
   };
@@ -85,7 +123,9 @@ const LeetCode = () => {
   // Get number of days in month
   // -----------------------------------------
   const getDaysInMonth = (year, month) => {
-    return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+    return new Date(
+      Date.UTC(year, month + 1, 0)
+    ).getUTCDate();
   };
 
   // -----------------------------------------
@@ -99,45 +139,73 @@ const LeetCode = () => {
   // Each column = one week
   // -----------------------------------------
   const generateMonth = (year, month) => {
-    const firstDate = new Date(Date.UTC(year, month, 1));
+    const firstDate = new Date(
+      Date.UTC(year, month, 1)
+    );
 
-    const daysInMonth = getDaysInMonth(year, month);
+    const daysInMonth = getDaysInMonth(
+      year,
+      month
+    );
 
     // 0 = Sunday
     // 1 = Monday
     // ...
     // 6 = Saturday
-    const firstDayOfWeek = firstDate.getUTCDay();
+    const firstDayOfWeek =
+      firstDate.getUTCDay();
 
-    const totalCells = firstDayOfWeek + daysInMonth;
+    const totalCells =
+      firstDayOfWeek + daysInMonth;
 
-    const numberOfWeeks = Math.ceil(totalCells / 7);
+    const numberOfWeeks =
+      Math.ceil(totalCells / 7);
 
     const weeks = [];
 
-    for (let weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
+    for (
+      let weekIndex = 0;
+      weekIndex < numberOfWeeks;
+      weekIndex++
+    ) {
       const week = [];
 
-      for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
+      for (
+        let dayIndex = 0;
+        dayIndex < 7;
+        dayIndex++
+      ) {
         const dayNumber =
-          weekIndex * 7 + dayIndex - firstDayOfWeek + 1;
+          weekIndex * 7 +
+          dayIndex -
+          firstDayOfWeek +
+          1;
 
         // Empty cell before month starts
         // or after month ends
-        if (dayNumber < 1 || dayNumber > daysInMonth) {
+        if (
+          dayNumber < 1 ||
+          dayNumber > daysInMonth
+        ) {
           week.push(null);
           continue;
         }
 
         const date = new Date(
-          Date.UTC(year, month, dayNumber)
+          Date.UTC(
+            year,
+            month,
+            dayNumber
+          )
         );
 
-        const dateKey = formatDateKey(date);
+        const dateKey =
+          formatDateKey(date);
 
         week.push({
           date: dateKey,
-          count: activityData[dateKey] || 0,
+          count:
+            activityData[dateKey] || 0,
         });
       }
 
@@ -150,24 +218,33 @@ const LeetCode = () => {
   // -----------------------------------------
   // Generate 13 months
   //
-  // IMPORTANT:
   // Current month is ALWAYS the last block.
   // -----------------------------------------
   const generateMonths = () => {
     const today = new Date();
 
-    const endYear = today.getUTCFullYear();
-    const endMonth = today.getUTCMonth();
+    const endYear =
+      today.getUTCFullYear();
+
+    const endMonth =
+      today.getUTCMonth();
 
     // Start 12 months before current month
     const startDate = new Date(
-      Date.UTC(endYear, endMonth - 12, 1)
+      Date.UTC(
+        endYear,
+        endMonth - 12,
+        1
+      )
     );
 
     const months = [];
 
-    let currentYear = startDate.getUTCFullYear();
-    let currentMonth = startDate.getUTCMonth();
+    let currentYear =
+      startDate.getUTCFullYear();
+
+    let currentMonth =
+      startDate.getUTCMonth();
 
     while (
       currentYear < endYear ||
@@ -179,11 +256,18 @@ const LeetCode = () => {
         month: currentMonth,
 
         label: new Date(
-          Date.UTC(currentYear, currentMonth, 1)
-        ).toLocaleString("en-US", {
-          month: "short",
-          timeZone: "UTC",
-        }),
+          Date.UTC(
+            currentYear,
+            currentMonth,
+            1
+          )
+        ).toLocaleString(
+          "en-US",
+          {
+            month: "short",
+            timeZone: "UTC",
+          }
+        ),
 
         weeks: generateMonth(
           currentYear,
@@ -209,8 +293,11 @@ const LeetCode = () => {
   // -----------------------------------------
   const getActivityLevel = (count) => {
     if (count === 0) return 0;
+
     if (count <= 2) return 1;
+
     if (count <= 4) return 2;
+
     if (count <= 7) return 3;
 
     return 4;
@@ -220,13 +307,19 @@ const LeetCode = () => {
   // Difficulty Percentage
   // -----------------------------------------
   const easyPercentage =
-    (stats.easy / stats.totalSolved) * 100;
+    stats.totalSolved > 0
+      ? (stats.easy / stats.totalSolved) * 100
+      : 0;
 
   const mediumPercentage =
-    (stats.medium / stats.totalSolved) * 100;
+    stats.totalSolved > 0
+      ? (stats.medium / stats.totalSolved) * 100
+      : 0;
 
   const hardPercentage =
-    (stats.hard / stats.totalSolved) * 100;
+    stats.totalSolved > 0
+      ? (stats.hard / stats.totalSolved) * 100
+      : 0;
 
   return (
     <section className="mt-16">
@@ -415,17 +508,6 @@ const LeetCode = () => {
           <div className="min-w-max">
             <div className="flex gap-5">
               {months.map((monthData) => {
-                /*
-                 * Every week has:
-                 *
-                 * 7 cells × 12px
-                 * 6 gaps × 4px
-                 *
-                 * = 108px for 7-week theoretical width
-                 *
-                 * Actual width is calculated from
-                 * number of weeks in this month.
-                 */
                 const blockWidth =
                   monthData.weeks.length * 12 +
                   (monthData.weeks.length - 1) * 3;
@@ -435,9 +517,7 @@ const LeetCode = () => {
                     key={`${monthData.year}-${monthData.month}`}
                     className="shrink-0"
                   >
-                    {/* -------------------------------- */}
                     {/* Month Name */}
-                    {/* -------------------------------- */}
                     <div
                       className="mb-3 text-center text-sm text-gray-400"
                       style={{
@@ -447,9 +527,7 @@ const LeetCode = () => {
                       {monthData.label}
                     </div>
 
-                    {/* -------------------------------- */}
                     {/* Month Calendar */}
-                    {/* -------------------------------- */}
                     <div className="flex gap-[3px]">
                       {monthData.weeks.map(
                         (week, weekIndex) => (
@@ -459,11 +537,7 @@ const LeetCode = () => {
                           >
                             {week.map(
                               (day, dayIndex) => {
-                                /*
-                                 * Empty cells are kept
-                                 * invisible so the calendar
-                                 * alignment remains correct.
-                                 */
+                                // Invisible placeholder
                                 if (!day) {
                                   return (
                                     <div
@@ -506,9 +580,7 @@ const LeetCode = () => {
           </div>
         </div>
 
-        {/* ------------------------------------ */}
         {/* Legend */}
-        {/* ------------------------------------ */}
         <div className="mt-6 flex items-center justify-end gap-2 text-xs text-gray-400">
           <span>Less</span>
 
