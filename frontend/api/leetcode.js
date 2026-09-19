@@ -8,10 +8,18 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         query: `
-          query userCalendar($username: String!) {
+          query userLeetCodeData($username: String!) {
             matchedUser(username: $username) {
               userCalendar {
                 submissionCalendar
+              }
+
+              submitStatsGlobal {
+                acSubmissionNum {
+                  difficulty
+                  count
+                  submissions
+                }
               }
             }
           }
@@ -30,7 +38,19 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    return res.status(200).json(data);
+    if (!data?.data?.matchedUser) {
+      return res.status(404).json({
+        error: "LeetCode user not found",
+      });
+    }
+
+    const user = data.data.matchedUser;
+
+    return res.status(200).json({
+      calendar: user.userCalendar.submissionCalendar,
+
+      stats: user.submitStatsGlobal.acSubmissionNum,
+    });
   } catch (error) {
     console.error("LeetCode API Error:", error);
 
