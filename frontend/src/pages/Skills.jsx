@@ -17,6 +17,7 @@ import {
 } from "react-icons/si";
 import { FaCss3Alt } from "react-icons/fa";
 import { VscVscode } from "react-icons/vsc";
+import LeetCode from "../components/Leetcode.jsx";
 
 const skillGroups = [
   {
@@ -129,6 +130,8 @@ const Skills = () => {
             );
           })}
         </div>
+        {/* LeetCode Journey */}
+        <LeetCode />
       </div>
     </section>
   );
