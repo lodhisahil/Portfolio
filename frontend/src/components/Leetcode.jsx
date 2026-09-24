@@ -46,7 +46,7 @@ const LeetCode = () => {
 
         // Calculate active days
         const activeDays = Object.values(formattedData).filter(
-          (count) => count > 0
+          (count) => count > 0,
         ).length;
 
         // Calculate current streak
@@ -70,21 +70,13 @@ const LeetCode = () => {
 
         const allStats = result.stats;
 
-        const all = allStats.find(
-          (item) => item.difficulty === "All"
-        );
+        const all = allStats.find((item) => item.difficulty === "All");
 
-        const easy = allStats.find(
-          (item) => item.difficulty === "Easy"
-        );
+        const easy = allStats.find((item) => item.difficulty === "Easy");
 
-        const medium = allStats.find(
-          (item) => item.difficulty === "Medium"
-        );
+        const medium = allStats.find((item) => item.difficulty === "Medium");
 
-        const hard = allStats.find(
-          (item) => item.difficulty === "Hard"
-        );
+        const hard = allStats.find((item) => item.difficulty === "Hard");
 
         setStats({
           totalSolved: all?.count || 0,
@@ -120,17 +112,14 @@ const LeetCode = () => {
       const week = [];
 
       for (let dayIndex = 0; dayIndex < 7; dayIndex++) {
-        const dayNumber =
-          weekIndex * 7 + dayIndex - firstDayOfWeek + 1;
+        const dayNumber = weekIndex * 7 + dayIndex - firstDayOfWeek + 1;
 
         if (dayNumber < 1 || dayNumber > daysInMonth) {
           week.push(null);
           continue;
         }
 
-        const date = new Date(
-          Date.UTC(year, month, dayNumber)
-        );
+        const date = new Date(Date.UTC(year, month, dayNumber));
 
         const dateKey = formatDateKey(date);
 
@@ -152,9 +141,7 @@ const LeetCode = () => {
     const endYear = today.getUTCFullYear();
     const endMonth = today.getUTCMonth();
 
-    const startDate = new Date(
-      Date.UTC(endYear, endMonth - 12, 1)
-    );
+    const startDate = new Date(Date.UTC(endYear, endMonth - 12, 1));
 
     const months = [];
 
@@ -168,12 +155,13 @@ const LeetCode = () => {
       months.push({
         year: currentYear,
         month: currentMonth,
-        label: new Date(
-          Date.UTC(currentYear, currentMonth, 1)
-        ).toLocaleString("en-US", {
-          month: "short",
-          timeZone: "UTC",
-        }),
+        label: new Date(Date.UTC(currentYear, currentMonth, 1)).toLocaleString(
+          "en-US",
+          {
+            month: "short",
+            timeZone: "UTC",
+          },
+        ),
         weeks: generateMonth(currentYear, currentMonth),
       });
 
@@ -200,19 +188,13 @@ const LeetCode = () => {
   const months = generateMonths();
 
   const easyPercentage =
-    stats.totalSolved > 0
-      ? (stats.easy / stats.totalSolved) * 100
-      : 0;
+    stats.totalSolved > 0 ? (stats.easy / stats.totalSolved) * 100 : 0;
 
   const mediumPercentage =
-    stats.totalSolved > 0
-      ? (stats.medium / stats.totalSolved) * 100
-      : 0;
+    stats.totalSolved > 0 ? (stats.medium / stats.totalSolved) * 100 : 0;
 
   const hardPercentage =
-    stats.totalSolved > 0
-      ? (stats.hard / stats.totalSolved) * 100
-      : 0;
+    stats.totalSolved > 0 ? (stats.hard / stats.totalSolved) * 100 : 0;
 
   return (
     <section className="mt-16">
@@ -222,79 +204,70 @@ const LeetCode = () => {
         </p>
 
         <h2 className="text-3xl font-bold text-white md:text-4xl">
-          My{" "}
-          <span className="text-cyan-300">
-            LeetCode Journey
-          </span>
+          My <span className="text-cyan-300">LeetCode Journey</span>
         </h2>
 
         <p className="mx-auto mt-4 max-w-2xl text-gray-400">
-          Consistently solving problems and improving my
-          data structures and algorithm skills.
+          Consistently solving problems and improving my data structures and
+          algorithm skills.
         </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur-xl transition duration-300 hover:border-cyan-300/40 hover:bg-white/10">
-          <p className="text-sm text-gray-400">
-            Problems Solved
-          </p>
+          <p className="text-sm text-gray-400">Problems Solved</p>
 
           <p className="mt-2 text-4xl font-bold text-white">
             {stats.totalSolved}
           </p>
 
-          <p className="mt-1 text-sm text-cyan-300">
-            Total Problems
-          </p>
+          <p className="mt-1 text-sm text-cyan-300">Total Problems</p>
         </div>
 
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur-xl transition duration-300 hover:border-cyan-300/40 hover:bg-white/10">
-          <p className="text-sm text-gray-400">
-            Current Streak
-          </p>
+          <p className="text-sm text-gray-400">Current Streak</p>
 
-          <p className="mt-2 text-4xl font-bold text-white">
-            {stats.streak}
-          </p>
+          <p className="mt-2 text-4xl font-bold text-white">{stats.streak}</p>
 
-          <p className="mt-1 text-sm text-cyan-300">
-            Days
-          </p>
+          <p className="mt-1 text-sm text-cyan-300">Days</p>
         </div>
 
         <div className="rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur-xl transition duration-300 hover:border-cyan-300/40 hover:bg-white/10">
-          <p className="text-sm text-gray-400">
-            Active Days
-          </p>
+          <p className="text-sm text-gray-400">Active Days</p>
 
           <p className="mt-2 text-4xl font-bold text-white">
             {stats.activeDays}
           </p>
 
-          <p className="mt-1 text-sm text-cyan-300">
-            Coding Days
-          </p>
+          <p className="mt-1 text-sm text-cyan-300">Coding Days</p>
         </div>
+        <a
+          href="https://leetcode.com/u/lodhi___sahil/"
+          target="_blank"
+          rel="noreferrer"
+          className="group rounded-2xl border border-white/15 bg-white/5 p-6 text-center backdrop-blur-xl transition duration-300 hover:border-cyan-300/50 hover:bg-cyan-300/10"
+        >
+          <p className="text-sm text-gray-400">LeetCode Profile</p>
+
+          <p className="mt-3 text-xl font-bold text-white transition group-hover:text-cyan-300">
+            View Profile ↗
+          </p>
+
+          <p className="mt-1 text-sm text-cyan-300">lodhi___sahil</p>
+        </a>
       </div>
 
       <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-6 backdrop-blur-xl md:p-8">
         <div className="mb-6">
-          <h3 className="text-xl font-semibold text-white">
-            Problems Solved
-          </h3>
+          <h3 className="text-xl font-semibold text-white">Problems Solved</h3>
 
-          <p className="mt-1 text-sm text-gray-400">
-            Difficulty breakdown
-          </p>
+          <p className="mt-1 text-sm text-gray-400">Difficulty breakdown</p>
         </div>
 
         <div className="grid gap-5 md:grid-cols-3">
           <div className="rounded-xl border border-white/10 bg-black/20 p-5">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-green-400">
-                Easy
-              </span>
+              <span className="text-sm font-medium text-green-400">Easy</span>
 
               <span className="text-2xl font-bold text-white">
                 {stats.easy}
@@ -342,9 +315,7 @@ const LeetCode = () => {
 
           <div className="rounded-xl border border-white/10 bg-black/20 p-5">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-red-400">
-                Hard
-              </span>
+              <span className="text-sm font-medium text-red-400">Hard</span>
 
               <span className="text-2xl font-bold text-white">
                 {stats.hard}
@@ -401,48 +372,33 @@ const LeetCode = () => {
                     </div>
 
                     <div className="flex gap-[3px]">
-                      {monthData.weeks.map(
-                        (week, weekIndex) => (
-                          <div
-                            key={weekIndex}
-                            className="flex flex-col gap-1"
-                          >
-                            {week.map(
-                              (day, dayIndex) => {
-                                if (!day) {
-                                  return (
-                                    <div
-                                      key={dayIndex}
-                                      className="h-3 w-3"
-                                    />
-                                  );
-                                }
+                      {monthData.weeks.map((week, weekIndex) => (
+                        <div key={weekIndex} className="flex flex-col gap-1">
+                          {week.map((day, dayIndex) => {
+                            if (!day) {
+                              return <div key={dayIndex} className="h-3 w-3" />;
+                            }
 
-                                const level =
-                                  getActivityLevel(
-                                    day.count
-                                  );
+                            const level = getActivityLevel(day.count);
 
-                                const colors = [
-                                  "bg-white/5",
-                                  "bg-cyan-400/20",
-                                  "bg-cyan-400/40",
-                                  "bg-cyan-400/70",
-                                  "bg-cyan-300",
-                                ];
+                            const colors = [
+                              "bg-white/5",
+                              "bg-cyan-400/20",
+                              "bg-cyan-400/40",
+                              "bg-cyan-400/70",
+                              "bg-cyan-300",
+                            ];
 
-                                return (
-                                  <div
-                                    key={day.date}
-                                    title={`${day.date}: ${day.count} submissions`}
-                                    className={`h-3 w-3 rounded-[3px] ${colors[level]} transition duration-200 hover:scale-125`}
-                                  />
-                                );
-                              }
-                            )}
-                          </div>
-                        )
-                      )}
+                            return (
+                              <div
+                                key={day.date}
+                                title={`${day.date}: ${day.count} submissions`}
+                                className={`h-3 w-3 rounded-[3px] ${colors[level]} transition duration-200 hover:scale-125`}
+                              />
+                            );
+                          })}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 );
