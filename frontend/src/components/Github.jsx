@@ -225,16 +225,16 @@ const GitHub = () => {
   return (
     <section className="mt-20">
       {/* Heading */}
-      <div className="mb-10">
+      <div className="mb-8 text-center">
         <p className="text-sm font-medium uppercase tracking-[0.3em] text-cyan-300">
-          GitHub
+          Open Source
         </p>
 
-        <h2 className="mt-3 text-4xl font-bold text-white md:text-5xl">
-          GitHub Activity
+        <h2 className="text-3xl font-bold text-white md:text-4xl">
+          Github <span className="text-cyan-300">Activity</span>
         </h2>
 
-        <p className="mt-4 max-w-2xl text-gray-400">
+        <p className="mx-auto mt-4 max-w-2xl text-gray-400">
           My coding activity, contributions and consistency
           across GitHub.
         </p>

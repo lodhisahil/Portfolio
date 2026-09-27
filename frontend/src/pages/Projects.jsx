@@ -2,15 +2,6 @@ import React from "react";
 
 const projects = [
   {
-    title: "Dahej.com",
-    description:
-      "A location-based social safety platform designed to provide emergency alerts, public assistance and community-focused features.",
-    technologies: ["React", "Tailwind CSS", "Appwrite", "Maps API"],
-    image: "/projects/dahej.png",
-    liveLink: "https://dahej-com-2dav.vercel.app/",
-    githubLink: "https://github.com/lodhisahil/Dahej.com",
-  },
-  {
     title: "Forever E-Commerce",
     description:
       "A modern e-commerce website with a responsive interface, product browsing and a smooth shopping experience.",
@@ -18,15 +9,6 @@ const projects = [
     image: "/projects/forever.png",
     liveLink: "https://forever-ecommerce-website-pearl.vercel.app/",
     githubLink: "https://github.com/lodhisahil/Forever-Ecommerce-website",
-  },
-  {
-    title: "Blog Application",
-    description:
-      "A full-featured blog application where users can create, read and manage blog posts with authentication.",
-    technologies: ["React", "Appwrite", "JavaScript", "Tailwind CSS"],
-    image: "/projects/megablog.png",
-    liveLink: "https://blog-application-eta-two.vercel.app/",
-    githubLink: "https://github.com/lodhisahil/Blog-Application",
   },
   {
     title: "Social Post Application",
@@ -37,6 +19,25 @@ const projects = [
     liveLink: "https://social-post-application-five.vercel.app/",
     githubLink: "https://github.com/lodhisahil/Social-Post-Application",
   },
+  {
+    title: "Dahej.com",
+    description:
+      "A basic fun Dahej calculator build for calculating your social points to convert it in current market price (NOTE: It is only for fun purposes).",
+    technologies: ["React", "Tailwind CSS", "Appwrite", "Maps API"],
+    image: "/projects/dahej.png",
+    liveLink: "https://dahej-com-2dav.vercel.app/",
+    githubLink: "https://github.com/lodhisahil/Dahej.com",
+  },
+  {
+    title: "Blog Application",
+    description:
+      "A full-featured blog application where users can create, read and manage blog posts with authentication.",
+    technologies: ["React", "Appwrite", "JavaScript", "Tailwind CSS"],
+    image: "/projects/megablog.png",
+    liveLink: "https://blog-application-eta-two.vercel.app/",
+    githubLink: "https://github.com/lodhisahil/Blog-Application",
+  }
+  
 ];
 
 const Projects = () => {
