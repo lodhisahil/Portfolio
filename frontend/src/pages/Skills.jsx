@@ -18,6 +18,7 @@ import {
 import { FaCss3Alt } from "react-icons/fa";
 import { VscVscode } from "react-icons/vsc";
 import LeetCode from "../components/Leetcode.jsx";
+import GitHub from "../components/Github.jsx";
 
 const skillGroups = [
   {
@@ -132,6 +133,8 @@ const Skills = () => {
         </div>
         {/* LeetCode Journey */}
         <LeetCode />
+        {/* Github Journey */}
+        <GitHub />
       </div>
     </section>
   );

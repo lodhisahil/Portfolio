@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const LeetCode = () => {
   const [stats, setStats] = useState({
@@ -11,6 +11,8 @@ const LeetCode = () => {
   });
 
   const [activityData, setActivityData] = useState({});
+
+  const heatmapRef = useRef(null);
 
   const formatDateKey = (date) => {
     const year = date.getUTCFullYear();
@@ -93,6 +95,26 @@ const LeetCode = () => {
 
     fetchLeetCodeData();
   }, []);
+
+  useEffect(() => {
+  const scrollToLatest = () => {
+    const container = heatmapRef.current;
+
+    if (!container) return;
+
+    container.scrollLeft =
+      container.scrollWidth - container.clientWidth;
+  };
+
+  const timer = setTimeout(scrollToLatest, 100);
+
+  window.addEventListener("resize", scrollToLatest);
+
+  return () => {
+    clearTimeout(timer);
+    window.removeEventListener("resize", scrollToLatest);
+  };
+}, [activityData]);
 
   const getDaysInMonth = (year, month) => {
     return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
@@ -349,7 +371,7 @@ const LeetCode = () => {
           </p>
         </div>
 
-        <div className="overflow-x-auto pb-3">
+        <div ref={heatmapRef} className="overflow-x-auto pb-3">
           <div className="min-w-max">
             <div className="flex gap-5">
               {months.map((monthData) => {
