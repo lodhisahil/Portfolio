@@ -88,7 +88,7 @@ const Contact = () => {
               </a>
 
               <a
-                href="https://www.linkedin.com/in/sahil-l%C3%B8dhi-a451a62b6/"
+                href="https://www.linkedin.com/in/sahillodhi/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-xl border border-white/20 bg-white/10 px-4 py-2 text-sm text-white transition hover:border-cyan-300/50 hover:text-cyan-300"
